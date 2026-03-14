@@ -317,11 +317,11 @@
 	.hero-title {
 		font-family: var(--font-display);
 		font-weight: 800;
-		font-size: clamp(3rem, 9vw, 8.5rem);
-		line-height: 1.15;
+		font-size: clamp(2rem, 9vw, 8.5rem);
+		line-height: 1;
 		letter-spacing: -0.03em;
-		padding-bottom: 0.2em;
-		margin-bottom: 0.25em;
+		padding-bottom: 0.3em;
+		margin-bottom: 0.1em;
 		opacity: 0;
 		animation: fadeUp 0.8s 0.35s ease-out forwards;
 	}
