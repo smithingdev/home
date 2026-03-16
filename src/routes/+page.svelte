@@ -20,28 +20,10 @@
 		}
 	];
 
-	const tech = [
-		'PHP',
-		'TypeScript',
-		'JavaScript',
-		'Laravel',
-		'Svelte',
-		'Livewire',
-		'Alpine.js',
-		'Tailwind CSS',
-		'Node.js',
-		'MySQL',
-		'Oracle',
-		'Redis',
-		'Docker',
-		'VSCode',
-		'GitHub',
-		'GitLab'
-	];
-
 	const links = [
 		{ platform: 'github', handle: 'smithingdev', url: 'https://github.com/smithingdev' },
-		{ platform: 'email', handle: 'hello@smithing.dev', url: 'mailto:hello@smithing.dev' }
+		{ platform: 'twitter', handle: '@smithingdev', url: 'https://x.com/smithingdev' },
+		{ platform: 'email', handle: 'smithingdev@gmail.com', url: 'mailto:smithingdev@gmail.com' }
 	];
 
 	/* ── Nav scroll state ── */
@@ -120,11 +102,6 @@
 		<a href="https://vaxtly.app">local-first desktop apps</a>.
 		Focused on developer experience, open source, and software that ships.
 	</p>
-	<div class="about-tech">
-		{#each tech as t}
-			<span>{t}</span>
-		{/each}
-	</div>
 </section>
 
 <div class="divider" aria-hidden="true"></div>
@@ -487,31 +464,6 @@
 	.about-text a:hover {
 		color: var(--ember-light);
 		text-decoration-color: var(--ember);
-	}
-
-	.about-tech {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-		gap: 0.35rem;
-		margin-top: 1.75rem;
-	}
-
-	.about-tech span {
-		font-family: var(--font-mono);
-		font-size: 0.68rem;
-		color: var(--text-tertiary);
-		padding: 0.2rem 0.55rem;
-		border: 1px solid var(--border-subtle);
-		border-radius: 3px;
-		transition:
-			border-color 0.2s,
-			color 0.2s;
-	}
-
-	.about-tech span:hover {
-		border-color: var(--border-hover);
-		color: var(--text-secondary);
 	}
 
 	/* ── Divider ── */
