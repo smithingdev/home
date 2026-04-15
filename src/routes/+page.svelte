@@ -162,8 +162,6 @@
 
 <footer class="footer">
 	<span>&copy; {new Date().getFullYear()} smithing.dev</span>
-	<span class="footer-sep">&mdash;</span>
-	<span>forged with <a href="https://svelte.dev" class="footer-link">Svelte</a></span>
 </footer>
 
 <!-- ═══════════════ STYLES ═══════════════ -->
@@ -714,19 +712,6 @@
 		border-top: 1px solid var(--border-subtle);
 		max-width: 1100px;
 		margin: 0 auto;
-	}
-
-	.footer-sep {
-		opacity: 0.4;
-	}
-
-	.footer-link {
-		color: var(--ember-dim);
-		transition: color 0.2s;
-	}
-
-	.footer-link:hover {
-		color: var(--ember);
 	}
 
 	/* ── Responsive ── */

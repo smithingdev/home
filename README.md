@@ -1,42 +1,28 @@
-# sv
+# smithing.dev
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Personal site and developer portfolio — live at [smithing.dev](https://smithing.dev).
 
-## Creating a project
+## Built with
 
-If you're seeing this, you've probably already done this step. Congrats!
+- [SvelteKit](https://svelte.dev) + Svelte 5 (runes)
+- TypeScript
+- Static adapter (deployed to GitHub Pages)
+- [Syne](https://fonts.google.com/specimen/Syne), [Fira Code](https://fonts.google.com/specimen/Fira+Code), [Manrope](https://fonts.google.com/specimen/Manrope)
 
-```sh
-# create a new project
-npx sv create my-app
-```
-
-To recreate this project with the same configuration:
+## Development
 
 ```sh
-# recreate this project
-npx sv@0.12.7 create --template minimal --types ts --no-install .
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
+npm install
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
-
-To create a production version of your app:
+## Build
 
 ```sh
 npm run build
+npm run preview  # preview the static output locally
 ```
 
-You can preview the production build with `npm run preview`.
+## License
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+Source code is available for reference. Please don't clone and present it as your own.
