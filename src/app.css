@@ -1,30 +1,27 @@
 :root {
-	/* Palette — warm forge tones */
-	--bg-deep: #050505;
-	--bg-primary: #0a0a0a;
-	--bg-secondary: #111111;
-	--bg-surface: #151514;
-	--bg-surface-hover: #1c1c1a;
+	/* ── Ground: cold, matte, near-black iron ── */
+	--ground: #0d0b09;
+	--ground-deep: #0a0908;
+	--panel: #14110e;
+	--line: #241e18;
+	--line-hi: #382c20;
 
-	--border-subtle: #1a1a18;
-	--border: #222220;
-	--border-hover: #333330;
+	/* ── Ink ── */
+	--ink: #e8e1d5;
+	--ink-2: #99907f;
+	--ink-3: #5c5347;
 
-	--text-primary: #ece8e4;
-	--text-secondary: #8a8480;
-	--text-tertiary: #504c48;
+	/* ── Cold steel (resting state of anything heatable) ── */
+	--steel: #7a7062;
 
-	--ember: #e8651a;
-	--ember-light: #ff8c42;
-	--ember-hot: #ffb347;
-	--ember-dim: #a04810;
-	--ember-glow: rgba(232, 101, 26, 0.12);
-	--ember-glow-strong: rgba(232, 101, 26, 0.25);
+	/* ── Ember: the single matte accent. Fire lives in interaction, not decoration. ── */
+	--ember: #b8551f;
+	--ember-deep: #7c3a13;
 
-	/* Typography */
-	--font-display: 'Syne', sans-serif;
-	--font-mono: 'Fira Code', monospace;
-	--font-body: 'Manrope', sans-serif;
+	/* ── Type ── */
+	--font-display: 'Archivo', 'Arial Narrow', sans-serif;
+	--font-body: 'Archivo', system-ui, sans-serif;
+	--font-mono: 'Martian Mono', ui-monospace, monospace;
 }
 
 *,
@@ -44,20 +41,21 @@ html {
 
 body {
 	font-family: var(--font-body);
-	background-color: var(--bg-primary);
-	color: var(--text-primary);
+	background: linear-gradient(180deg, var(--ground) 0%, var(--ground-deep) 100%) fixed;
+	background-color: var(--ground);
+	color: var(--ink);
 	line-height: 1.6;
 	overflow-x: hidden;
 }
 
-/* Grain overlay */
+/* Mill-scale grain — matte metal texture */
 body::before {
 	content: '';
 	position: fixed;
 	inset: 0;
 	pointer-events: none;
 	z-index: 9999;
-	opacity: 0.03;
+	opacity: 0.035;
 	background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 	background-size: 256px 256px;
 }
@@ -67,25 +65,32 @@ a {
 	text-decoration: none;
 }
 
+:focus-visible {
+	outline: 2px solid var(--ember);
+	outline-offset: 3px;
+}
+
 ::selection {
 	background: var(--ember);
-	color: var(--bg-primary);
+	color: var(--ground);
 }
 
-/* Scrollbar */
 ::-webkit-scrollbar {
-	width: 6px;
+	width: 5px;
 }
-
 ::-webkit-scrollbar-track {
-	background: var(--bg-primary);
+	background: transparent;
 }
-
 ::-webkit-scrollbar-thumb {
-	background: var(--border);
+	background: var(--line-hi);
 	border-radius: 3px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-	background: var(--text-tertiary);
+	background: var(--ember);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
 }

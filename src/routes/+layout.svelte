@@ -4,8 +4,11 @@
 </script>
 
 <svelte:head>
-	<title>smithing.dev</title>
-	<meta name="description" content="Developer profile — forging software, one commit at a time." />
+	<title>smithing.dev — martin</title>
+	<meta
+		name="description"
+		content="Martin — smithing.dev. Developer tools in the open, on fifteen years of large systems."
+	/>
 </svelte:head>
 
 {@render children()}
