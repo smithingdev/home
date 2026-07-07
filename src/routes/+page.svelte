@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { i18n } from '$lib/i18n.svelte';
+
 	/* ─────────────────────────────────────────────
 	   smithing.dev — cold steel, warm hands.
 	   The page rests matte and near-monochrome.
@@ -16,18 +18,18 @@
 		{
 			name: 'beartropy',
 			host: 'beartropy.com',
-			desc: 'A tall-stack ecosystem of robust, beautiful components for your next Laravel project — SAML 2.0, data tables, roles & permissions, and more.',
+			key: 'beartropy',
 			meta: 'laravel · livewire · tailwind',
 			url: 'https://beartropy.com'
 		},
 		{
 			name: 'vaxtly',
 			host: 'vaxtly.app',
-			desc: 'A local-first desktop API client. Test REST, WebSocket, and MCP endpoints — sync collections over Git, no cloud accounts required.',
+			key: 'vaxtly',
 			meta: 'desktop · open source · mit',
 			url: 'https://vaxtly.app'
 		}
-	];
+	] as const;
 
 	const EMAIL = 'smithingdev@gmail.com';
 
@@ -35,37 +37,31 @@
 	   Each mark certifies one part of the corporate work. */
 	const punches = [
 		{
-			label: 'identity systems & idps',
 			cx: 130,
 			above: true,
 			d: 'M12 3 L19 6 V11 C19 16 16 19.5 12 21 C8 19.5 5 16 5 11 V6 Z M12 9.5 a1.5 1.5 0 1 0 0.01 0 M12 12.5 v3'
 		},
 		{
-			label: 'apis & integrations',
 			cx: 278,
 			above: false,
 			d: 'M8 7 L3 12 L8 17 M16 7 L21 12 L16 17'
 		},
 		{
-			label: 'automation platforms',
 			cx: 426,
 			above: true,
 			d: 'M12 9 a3 3 0 1 0 0.01 0 M12 2 v3 M12 19 v3 M2 12 h3 M19 12 h3 M4.9 4.9 L7 7 M17 17 L19.1 19.1 M19.1 4.9 L17 7 M7 17 L4.9 19.1'
 		},
 		{
-			label: 'devops & devsecops',
 			cx: 574,
 			above: false,
 			d: 'M12 12 C10.5 9.5 9 8.5 7 8.5 C4.5 8.5 3 10 3 12 C3 14 4.5 15.5 7 15.5 C9 15.5 10.5 14.5 12 12 C13.5 9.5 15 8.5 17 8.5 C19.5 8.5 21 10 21 12 C21 14 19.5 15.5 17 15.5 C15 15.5 13.5 14.5 12 12'
 		},
 		{
-			label: 'mcp servers & tooling',
 			cx: 722,
 			above: true,
 			d: 'M14 4 L20 10 L17 13 L11 7 Z M12.5 8.5 L4 17 L4 20 L7 20 L15.5 11.5'
 		},
 		{
-			label: 'dev & automation team — led',
 			cx: 870,
 			above: false,
 			d: 'M12 5 a2.5 2.5 0 1 0 0.01 0 M7 13.5 a2.5 2.5 0 1 0 0.01 0 M17 13.5 a2.5 2.5 0 1 0 0.01 0'
@@ -213,15 +209,24 @@
 <nav class="nav">
 	<a href="/" class="brand">smithing<span class="brand-tld">.dev</span></a>
 	<div class="nav-links">
-		<a href="#open">open</a>
-		<a href="#years">years</a>
-		<a href="#word">word</a>
+		<a href="#open">{i18n.t.nav.open}</a>
+		<a href="#years">{i18n.t.nav.years}</a>
+		<a href="#word">{i18n.t.nav.word}</a>
+		<span class="lang" role="group" aria-label="language">
+			<button class="lang-opt" class:on={i18n.locale === 'en'} onclick={() => i18n.set('en')}>
+				eng
+			</button>
+			<span class="lang-sep">/</span>
+			<button class="lang-opt" class:on={i18n.locale === 'es'} onclick={() => i18n.set('es')}>
+				spa
+			</button>
+		</span>
 	</div>
 </nav>
 
 <!-- ═══════════ HERO — the name is the material ═══════════ -->
 <header class="hero">
-	<p class="hero-eyebrow">martin — the smith behind it</p>
+	<p class="hero-eyebrow">{i18n.t.heroEyebrow}</p>
 
 	<h1 class="plate" aria-label={NAME}>
 		{#each NAME.split('') as ch}
@@ -229,21 +234,18 @@
 		{/each}
 	</h1>
 
-	<p class="hero-line">
-		I make developer tools in the open — with fifteen years of large, security-critical systems
-		underneath.
-	</p>
+	<p class="hero-line">{i18n.t.heroLine}</p>
 
 	<div class="hero-actions">
 		<a href="https://github.com/smithingdev" class="btn btn--solid">GitHub</a>
-		<a href="#open" class="btn">Open source</a>
+		<a href="#open" class="btn">{i18n.t.heroOpenSource}</a>
 	</div>
 </header>
 
 <!-- ═══════════ IN THE OPEN ═══════════ -->
 <section id="open" class="block" use:inview>
 	<div class="block-head">
-		<h2>in the open</h2>
+		<h2>{i18n.t.openHead}</h2>
 		<span class="block-rule"></span>
 	</div>
 
@@ -254,7 +256,7 @@
 					<h3 class="frow-name" aria-label={w.name}>
 						{#each w.name.split('') as ch}<span class="lt" aria-hidden="true">{ch}</span>{/each}
 					</h3>
-					<p>{w.desc}</p>
+					<p>{i18n.t.works[w.key]}</p>
 				</div>
 				<div class="frow-side">
 					<span class="frow-host">{w.host} ↗</span>
@@ -263,7 +265,7 @@
 			</a>
 		{/each}
 		<a class="frow frow--more" href="https://github.com/smithingdev" target="_blank" rel="noopener noreferrer">
-			<span class="more-text">more in the forge</span>
+			<span class="more-text">{i18n.t.moreForge}</span>
 			<span class="frow-host">github.com/smithingdev ↗</span>
 		</a>
 	</div>
@@ -272,51 +274,58 @@
 <!-- ═══════════ YEARS — the machine ═══════════ -->
 <section id="years" class="block" use:inview>
 	<div class="block-head">
-		<h2>fifteen years, folded in</h2>
+		<h2>{i18n.t.yearsHead}</h2>
 		<span class="block-rule"></span>
 	</div>
 
-	<p class="years-note">
-		Fifteen years inside a large company, focused on cybersecurity — today leading the development
-		&amp; automation team of its cybersecurity division. It's the work nobody sees: the systems
-		that decide who gets in, measured in decades, not sprints. All of it one machine; these are
-		the parts.
-	</p>
+	<p class="years-note">{i18n.t.yearsNote}</p>
 
-	<div
-		class="machine"
-		role="img"
-		aria-label="Six hallmark punches wired to a common bus: identity systems and IdPs, APIs and integrations, automation platforms, DevOps and DevSecOps, MCP servers and tooling, and a development and automation team, led"
-	>
+	<div class="machine" role="img" aria-label={i18n.t.machineAria}>
 		<svg viewBox="0 0 1000 320" aria-hidden="true">
 			<line class="bus" x1="50" y1="160" x2="950" y2="160" />
 			<rect class="term" x="44" y="154" width="12" height="12" />
 			<rect class="term" x="944" y="154" width="12" height="12" />
 
-			{#each punches as p}
+			{#each punches as p, i}
 				{@const iconY = p.above ? 58 : 214}
 				{@const stubY1 = p.above ? iconY + 50 : 160}
 				{@const stubY2 = p.above ? 160 : iconY - 2}
 				{@const labelY = p.above ? 36 : 302}
+				{@const lines = i18n.t.punchLabels[i].split('\n')}
 				<g class="pnode">
+					<rect
+						class="hit"
+						x={p.cx - 74}
+						y={p.above ? 18 : 160}
+						width="148"
+						height={p.above ? 142 : 148}
+					/>
 					<line class="stub" x1={p.cx} y1={stubY1} x2={p.cx} y2={stubY2} />
 					<circle class="joint" cx={p.cx} cy="160" r="3.5" />
 					<g transform="translate({p.cx - 24}, {iconY}) scale(2)">
 						<path class="punch" d={p.d} />
 					</g>
-					<text class="punch-label" x={p.cx} y={labelY}>{p.label}</text>
+					<text
+					class="punch-label"
+					x={p.cx}
+					y={labelY - (p.above ? 0 : (lines.length - 1) * 14)}
+				>
+					{#each lines as line, li}
+						<tspan x={p.cx} dy={li === 0 ? 0 : 14}>{line}</tspan>
+					{/each}
+				</text>
 				</g>
 			{/each}
 		</svg>
 
 		<!-- narrow screens: the bus goes vertical -->
 		<div class="machine-m" aria-hidden="true">
-			{#each punches as p}
+			{#each punches as p, i}
 				<div class="m-row">
 					<svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
 						<path d={p.d} />
 					</svg>
-					<span>{p.label}</span>
+					<span>{i18n.t.punchLabels[i]}</span>
 				</div>
 			{/each}
 		</div>
@@ -326,28 +335,50 @@
 <!-- ═══════════ SEND WORD ═══════════ -->
 <section id="word" class="block" use:inview>
 	<div class="block-head">
-		<h2>send word</h2>
+		<h2>{i18n.t.wordHead}</h2>
 		<span class="block-rule"></span>
 	</div>
-	<p class="word-intro">A commission, an idea, or just to talk shop — the forge is open.</p>
+	<p class="word-intro">{i18n.t.wordIntro}</p>
 
 	<a class="word-mail" href="mailto:{EMAIL}" aria-label={EMAIL}>
 		{#each EMAIL.split('') as ch}<span class="lt" aria-hidden="true">{ch}</span>{/each}
 	</a>
 
 	<p class="word-else">
-		elsewhere —
-		<a href="https://github.com/smithingdev" target="_blank" rel="noopener noreferrer">github ↗</a>
+		<span class="else-label">{i18n.t.elsewhere}</span>
+		<a
+			href="https://github.com/smithingdev"
+			target="_blank"
+			rel="noopener noreferrer"
+			aria-label="GitHub — @smithingdev"
+		>
+			<svg class="else-ico" viewBox="0 0 16 16" aria-hidden="true">
+				<path
+					d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"
+				/>
+			</svg>
+			@smithingdev ↗
+		</a>
 		<span class="sep">·</span>
-		<a href="https://x.com/smithingdev" target="_blank" rel="noopener noreferrer">x @smithingdev ↗</a>
+		<a
+			href="https://x.com/smithingdev"
+			target="_blank"
+			rel="noopener noreferrer"
+			aria-label="X — @smithingdev"
+		>
+			<svg class="else-ico" viewBox="0 0 24 24" aria-hidden="true">
+				<path
+					d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117Z"
+				/>
+			</svg>
+			@smithingdev ↗
+		</a>
 	</p>
 </section>
 
 <!-- ═══════════ FOOTER ═══════════ -->
 <footer class="foot">
 	<span>© {new Date().getFullYear()} smithing.dev</span>
-	<span class="foot-dot">·</span>
-	<span>made by martin</span>
 </footer>
 
 <style>
@@ -392,6 +423,35 @@
 	.nav-links a:focus-visible {
 		color: var(--ember);
 		transition: color 0.12s;
+	}
+
+	.lang {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		padding-left: 1.6rem;
+		border-left: 1px solid var(--line-hi);
+	}
+	.lang-opt {
+		background: none;
+		border: none;
+		padding: 0;
+		font: inherit;
+		letter-spacing: inherit;
+		cursor: pointer;
+		color: var(--ink-3);
+		transition: color 1.8s ease;
+	}
+	.lang-opt:hover,
+	.lang-opt:focus-visible {
+		color: var(--ember);
+		transition: color 0.12s;
+	}
+	.lang-opt.on {
+		color: var(--ink);
+	}
+	.lang-sep {
+		color: var(--line-hi);
 	}
 
 	/* ═══════════ HERO ═══════════ */
@@ -580,6 +640,7 @@
 	.frow-host {
 		font-size: 0.72rem;
 		letter-spacing: 0.05em;
+		white-space: nowrap;
 		color: var(--ink-2);
 		transition: color 2.2s ease;
 	}
@@ -643,6 +704,11 @@
 		stroke-width: 1.5;
 	}
 
+	.pnode .hit {
+		fill: transparent;
+		stroke: none;
+		pointer-events: all;
+	}
 	.pnode .stub {
 		stroke: var(--line-hi);
 		stroke-width: 1.2;
@@ -725,8 +791,16 @@
 		margin: 0 0.5rem;
 	}
 	.word-else a {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5em;
 		color: var(--ink-2);
 		transition: color 2.2s ease;
+	}
+	.else-ico {
+		width: 1.1em;
+		height: 1.1em;
+		fill: currentColor;
 	}
 	.word-else a:hover,
 	.word-else a:focus-visible {
@@ -748,10 +822,6 @@
 		color: var(--ink-3);
 		border-top: 1px solid var(--line);
 	}
-	.foot-dot {
-		color: var(--line-hi);
-	}
-
 	/* ═══════════ MOTION ═══════════ */
 	@keyframes settle {
 		from {
@@ -854,6 +924,31 @@
 		.hero-actions .btn {
 			flex: 1;
 			text-align: center;
+		}
+		/* not enough steel for everything — keep the brand and the tongue */
+		.nav {
+			padding: 1.1rem 1rem;
+		}
+		.nav-links a {
+			display: none;
+		}
+		.lang {
+			padding-left: 0;
+			border-left: none;
+		}
+		.frow-side {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.5rem;
+		}
+		.word-else {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.7rem;
+		}
+		.word-else .sep {
+			display: none;
 		}
 	}
 </style>
