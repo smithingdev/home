@@ -11,7 +11,7 @@ const messages = {
 	en: {
 		title: 'smithing.dev',
 		description: 'smithing.dev — developer tools in the open, on fifteen years of large systems.',
-		nav: { open: 'open', years: 'years', word: 'word' },
+		nav: { open: 'open', years: 'years', word: 'contact' },
 		heroEyebrow: 'the smith behind it',
 		heroLine:
 			'I make developer tools in the open — with fifteen years of large, security-critical systems underneath.',
@@ -37,7 +37,7 @@ const messages = {
 			'mcp servers & tooling',
 			'dev & automation team — led'
 		],
-		wordHead: 'send word',
+		wordHead: 'contact',
 		wordIntro: 'A commission, an idea, or just to talk shop — the forge is open.',
 		elsewhere: 'elsewhere —'
 	},
@@ -45,7 +45,7 @@ const messages = {
 		title: 'smithing.dev',
 		description:
 			'smithing.dev — herramientas open source para developers, sobre quince años de sistemas grandes.',
-		nav: { open: 'open source', years: 'años', word: 'palabra' },
+		nav: { open: 'open source', years: 'años', word: 'contacto' },
 		heroEyebrow: 'el herrero detrás',
 		heroLine:
 			'Hago herramientas open source para developers — con quince años de sistemas grandes y críticos en seguridad por debajo.',
@@ -71,7 +71,7 @@ const messages = {
 			'servidores mcp & tooling',
 			'equipo dev & automatización\n— a cargo'
 		],
-		wordHead: 'mandá palabra',
+		wordHead: 'contacto',
 		wordIntro: 'Un encargo, una idea, o solo hablar del oficio — la forja está abierta.',
 		elsewhere: 'también en —'
 	}
