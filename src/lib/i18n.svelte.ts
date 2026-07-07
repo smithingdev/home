@@ -58,7 +58,7 @@ const messages = {
 				'Un cliente de APIs de escritorio, local-first. Probá endpoints REST, WebSocket y MCP — sincronizá colecciones por Git, sin cuentas en la nube.'
 		},
 		moreForge: 'más en la forja',
-		yearsHead: 'quince años, plegados adentro',
+		yearsHead: 'quince años, capa sobre capa',
 		yearsNote:
 			'Quince años dentro de una gran empresa, enfocado en ciberseguridad — hoy liderando el equipo de desarrollo y automatización de su división de ciberseguridad. Es el trabajo que nadie ve: los sistemas que deciden quién entra, medidos en décadas, no en sprints. Todo una sola máquina; estas son las partes.',
 		machineAria:
