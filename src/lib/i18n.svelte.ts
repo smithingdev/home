@@ -44,13 +44,13 @@ const messages = {
 	es: {
 		title: 'smithing.dev',
 		description:
-			'smithing.dev — herramientas para developers en abierto, sobre quince años de sistemas grandes.',
-		nav: { open: 'abierto', years: 'años', word: 'palabra' },
+			'smithing.dev — herramientas open source para developers, sobre quince años de sistemas grandes.',
+		nav: { open: 'open source', years: 'años', word: 'palabra' },
 		heroEyebrow: 'el herrero detrás',
 		heroLine:
-			'Hago herramientas para developers, en abierto — con quince años de sistemas grandes y críticos en seguridad por debajo.',
-		heroOpenSource: 'Código abierto',
-		openHead: 'en abierto',
+			'Hago herramientas open source para developers — con quince años de sistemas grandes y críticos en seguridad por debajo.',
+		heroOpenSource: 'Open source',
+		openHead: 'open source',
 		works: {
 			beartropy:
 				'Un ecosistema tall-stack de componentes robustos y hermosos para tu próximo proyecto Laravel — SAML 2.0, tablas de datos, roles y permisos, y más.',

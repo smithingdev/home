@@ -457,7 +457,9 @@
 	/* ═══════════ HERO ═══════════ */
 	.hero {
 		min-height: 100vh;
-		min-height: 100dvh;
+		/* svh, not dvh: dvh grows when the mobile url bar collapses,
+		   shoving everything below the hero mid-scroll */
+		min-height: 100svh;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -916,15 +918,7 @@
 		}
 	}
 
-	@media (max-width: 520px) {
-		.plate {
-			font-stretch: 100%;
-			font-size: clamp(1.6rem, 10.5vw, 2.9rem);
-		}
-		.hero-actions .btn {
-			flex: 1;
-			text-align: center;
-		}
+	@media (max-width: 560px) {
 		/* not enough steel for everything — keep the brand and the tongue */
 		.nav {
 			padding: 1.1rem 1rem;
@@ -935,6 +929,17 @@
 		.lang {
 			padding-left: 0;
 			border-left: none;
+		}
+	}
+
+	@media (max-width: 520px) {
+		.plate {
+			font-stretch: 100%;
+			font-size: clamp(1.6rem, 10.5vw, 2.9rem);
+		}
+		.hero-actions .btn {
+			flex: 1;
+			text-align: center;
 		}
 		.frow-side {
 			flex-direction: column;
