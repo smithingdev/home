@@ -346,7 +346,11 @@
 <!-- ═══════════ YEARS — the marks ═══════════ -->
 <section id="years" class="block" use:inview>
 	<div class="block-head">
-		<h2>{i18n.t.yearsHead}</h2>
+		<h2>
+			{#each i18n.t.yearsHead.split(/(?<=,) /) as part, i}{#if i}{' '}{/if}<span class="head-part"
+					>{part}</span
+				>{/each}
+		</h2>
 		<span class="block-rule"></span>
 	</div>
 
@@ -639,10 +643,14 @@
 		font-stretch: 112%;
 		font-size: 1.5rem;
 		letter-spacing: 0.01em;
-		white-space: nowrap;
+	}
+	/* a long head breaks only after its comma on narrow screens (es) */
+	.head-part {
+		display: inline-block;
 	}
 	.block-rule {
 		flex: 1;
+		min-width: 1rem;
 		height: 1px;
 		background: linear-gradient(90deg, var(--line-hi), transparent);
 	}
