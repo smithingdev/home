@@ -250,6 +250,7 @@
 	</div>
 
 	<div class="forged">
+		<!-- Beartropy & Vaxtly hidden for now
 		{#each works as w}
 			<a href={w.url} class="frow" target="_blank" rel="noopener noreferrer">
 				<div class="frow-main">
@@ -264,6 +265,7 @@
 				</div>
 			</a>
 		{/each}
+		-->
 		<a class="frow frow--more" href="https://github.com/smithingdev" target="_blank" rel="noopener noreferrer">
 			<span class="more-text">{i18n.t.moreForge}</span>
 			<span class="frow-host">github.com/smithingdev ↗</span>
