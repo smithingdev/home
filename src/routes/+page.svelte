@@ -190,6 +190,31 @@
 	const bevel = (x: number, y: number, w: number, h: number, b: number) =>
 		`${x + b},${y} ${x + w - b},${y} ${x + w},${y + b} ${x + w},${y + h - b} ${x + w - b},${y + h} ${x + b},${y + h} ${x},${y + h - b} ${x},${y + b}`;
 
+	/* Idle glow: while no mark is hovered, heat walks the row and back one
+	   mark at a time — slower than a hover: it warms slow and cools slow */
+	let glow = $state(-1);
+	let marksHover = $state(false);
+
+	$effect(() => {
+		if (marksHover || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		const last = punches.length - 1;
+		let step = 0;
+		let off: ReturnType<typeof setTimeout> | undefined;
+		const tick = () => {
+			/* ping-pong: 0 → last → 1, then around again */
+			const k = step % (2 * last);
+			glow = k <= last ? k : 2 * last - k;
+			off = setTimeout(() => (glow = -1), 1000);
+			step++;
+		};
+		const timer = setInterval(tick, 1100);
+		return () => {
+			clearInterval(timer);
+			clearTimeout(off);
+			glow = -1;
+		};
+	});
+
 	/* ── Reveal on enter ── */
 	function inview(node: HTMLElement) {
 		const io = new IntersectionObserver(
@@ -284,13 +309,18 @@
 	<p class="years-note">{i18n.t.yearsNote}</p>
 
 	<div class="marks" role="img" aria-label={i18n.t.marksAria}>
-		<svg viewBox="0 0 1000 {MARKS_H}" aria-hidden="true">
+		<svg
+			viewBox="0 0 1000 {MARKS_H}"
+			aria-hidden="true"
+			onpointerenter={() => (marksHover = true)}
+			onpointerleave={() => (marksHover = false)}
+		>
 			{#each punches as p, i}
 				{@const cx = X0 + SLOT * i + SLOT / 2}
 				{@const high = i % 2 === 0}
 				{@const cy = high ? 68 : 116}
 				{@const lines = i18n.t.punchLabels[i].split('\n')}
-				<g class="mark">
+				<g class="mark" class:glow={glow === i}>
 					<rect class="hit" x={cx - SLOT / 2} y="0" width={SLOT} height={MARKS_H} />
 					<polygon class="cartouche" points={bevel(cx - 42, cy, 84, 84, 11)} />
 					<g transform="translate({cx - 24}, {cy + 18}) scale(2)">
@@ -308,7 +338,7 @@
 		<!-- narrow screens: the marks stack, still unjoined -->
 		<div class="marks-m" aria-hidden="true">
 			{#each punches as p, i}
-				<div class="m-row">
+				<div class="m-row" class:glow={glow === i}>
 					<svg viewBox="0 0 40 40" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
 						<polygon class="cartouche" points={bevel(1, 1, 38, 38, 6)} />
 						<path d={p.d} transform="translate(8, 8)" />
@@ -729,6 +759,23 @@
 		transition: fill 0.12s;
 	}
 
+	/* idle glow: same heat as a hover, but it warms slow too */
+	.mark.glow .cartouche {
+		stroke: var(--ember);
+		transition: stroke 1.2s ease;
+	}
+	.mark.glow .punch {
+		stroke: var(--ember);
+		filter: drop-shadow(0 0 6px rgba(184, 85, 31, 0.45));
+		transition:
+			stroke 1.2s ease,
+			filter 1.2s ease;
+	}
+	.mark.glow .punch-label {
+		fill: var(--ink);
+		transition: fill 1.2s ease;
+	}
+
 	/* stacked fallback, hidden on wide screens */
 	.marks-m {
 		display: none;
@@ -868,16 +915,28 @@
 			height: 36px;
 			flex-shrink: 0;
 			stroke: var(--ink-3);
+			transition: stroke 2.2s ease;
 		}
 		.m-row .cartouche {
 			stroke: var(--line-hi);
 			stroke-width: 1.2;
+			transition: stroke 2.2s ease;
+		}
+		.m-row.glow svg,
+		.m-row.glow .cartouche {
+			stroke: var(--ember);
+			transition: stroke 1.2s ease;
+		}
+		.m-row.glow span {
+			color: var(--ink);
+			transition: color 1.2s ease;
 		}
 		.m-row span {
 			font-family: var(--font-mono);
 			font-size: 0.68rem;
 			letter-spacing: 0.08em;
 			color: var(--ink-2);
+			transition: color 2s ease;
 		}
 	}
 
