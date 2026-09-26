@@ -209,7 +209,7 @@
 <nav class="nav">
 	<a href="/" class="brand">smithing<span class="brand-tld">.dev</span></a>
 	<div class="nav-links">
-		<a href="#open">{i18n.t.nav.open}</a>
+		<a href="https://github.com/smithingdev" target="_blank" rel="noopener noreferrer">{i18n.t.nav.open}</a>
 		<a href="#years">{i18n.t.nav.years}</a>
 		<a href="#word">{i18n.t.nav.word}</a>
 		<span class="lang" role="group" aria-label="language">
@@ -238,11 +238,12 @@
 
 	<div class="hero-actions">
 		<a href="https://github.com/smithingdev" class="btn btn--solid">GitHub</a>
-		<a href="#open" class="btn">{i18n.t.heroOpenSource}</a>
+		<!-- <a href="#open" class="btn">{i18n.t.heroOpenSource}</a> -->
 	</div>
 </header>
 
-<!-- ═══════════ IN THE OPEN ═══════════ -->
+<!-- ═══════════ IN THE OPEN — hidden for now ═══════════
+
 <section id="open" class="block" use:inview>
 	<div class="block-head">
 		<h2>{i18n.t.openHead}</h2>
@@ -250,7 +251,6 @@
 	</div>
 
 	<div class="forged">
-		<!-- Beartropy & Vaxtly hidden for now
 		{#each works as w}
 			<a href={w.url} class="frow" target="_blank" rel="noopener noreferrer">
 				<div class="frow-main">
@@ -265,13 +265,13 @@
 				</div>
 			</a>
 		{/each}
-		-->
 		<a class="frow frow--more" href="https://github.com/smithingdev" target="_blank" rel="noopener noreferrer">
 			<span class="more-text">{i18n.t.moreForge}</span>
 			<span class="frow-host">github.com/smithingdev ↗</span>
 		</a>
 	</div>
 </section>
+-->
 
 <!-- ═══════════ YEARS — the machine ═══════════ -->
 <section id="years" class="block" use:inview>
