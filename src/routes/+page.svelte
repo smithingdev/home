@@ -33,37 +33,28 @@
 
 	const EMAIL = 'smithingdev@gmail.com';
 
-	/* The machine — six hallmark punches wired to a common bus.
-	   Each mark certifies one part of the corporate work. */
+	/* The marks — seven hallmarks struck in a staggered row, never joined.
+	   Separate pieces of the corporate work, the same hand. */
 	const punches = [
 		{
-			cx: 130,
-			above: true,
 			d: 'M12 3 L19 6 V11 C19 16 16 19.5 12 21 C8 19.5 5 16 5 11 V6 Z M12 9.5 a1.5 1.5 0 1 0 0.01 0 M12 12.5 v3'
 		},
 		{
-			cx: 278,
-			above: false,
 			d: 'M8 7 L3 12 L8 17 M16 7 L21 12 L16 17'
 		},
 		{
-			cx: 426,
-			above: true,
 			d: 'M12 9 a3 3 0 1 0 0.01 0 M12 2 v3 M12 19 v3 M2 12 h3 M19 12 h3 M4.9 4.9 L7 7 M17 17 L19.1 19.1 M19.1 4.9 L17 7 M7 17 L4.9 19.1'
 		},
 		{
-			cx: 574,
-			above: false,
 			d: 'M12 12 C10.5 9.5 9 8.5 7 8.5 C4.5 8.5 3 10 3 12 C3 14 4.5 15.5 7 15.5 C9 15.5 10.5 14.5 12 12 C13.5 9.5 15 8.5 17 8.5 C19.5 8.5 21 10 21 12 C21 14 19.5 15.5 17 15.5 C15 15.5 13.5 14.5 12 12'
 		},
 		{
-			cx: 722,
-			above: true,
 			d: 'M14 4 L20 10 L17 13 L11 7 Z M12.5 8.5 L4 17 L4 20 L7 20 L15.5 11.5'
 		},
 		{
-			cx: 870,
-			above: false,
+			d: 'M10 4 C10.6 8.6 12.4 10.4 17 11 C12.4 11.6 10.6 13.4 10 18 C9.4 13.4 7.6 11.6 3 11 C7.6 10.4 9.4 8.6 10 4 Z M18 3 v4 M16 5 h4 M18 16 v4 M16 18 h4'
+		},
+		{
 			d: 'M12 5 a2.5 2.5 0 1 0 0.01 0 M7 13.5 a2.5 2.5 0 1 0 0.01 0 M17 13.5 a2.5 2.5 0 1 0 0.01 0'
 		}
 	];
@@ -189,6 +180,16 @@
 		};
 	});
 
+	/* Hallmark row geometry: one slot per mark, inset from the panel edges.
+	   The row zigzags — even marks ride high with the label above, odd
+	   marks sit low with the label below — so no label shares a line
+	   with a neighbor's cartouche. */
+	const X0 = 40;
+	const MARKS_H = 268;
+	const SLOT = (1000 - 2 * X0) / punches.length;
+	const bevel = (x: number, y: number, w: number, h: number, b: number) =>
+		`${x + b},${y} ${x + w - b},${y} ${x + w},${y + b} ${x + w},${y + h - b} ${x + w - b},${y + h} ${x + b},${y + h} ${x},${y + h - b} ${x},${y + b}`;
+
 	/* ── Reveal on enter ── */
 	function inview(node: HTMLElement) {
 		const io = new IntersectionObserver(
@@ -273,7 +274,7 @@
 </section>
 -->
 
-<!-- ═══════════ YEARS — the machine ═══════════ -->
+<!-- ═══════════ YEARS — the marks ═══════════ -->
 <section id="years" class="block" use:inview>
 	<div class="block-head">
 		<h2>{i18n.t.yearsHead}</h2>
@@ -282,52 +283,37 @@
 
 	<p class="years-note">{i18n.t.yearsNote}</p>
 
-	<div class="machine" role="img" aria-label={i18n.t.machineAria}>
-		<svg viewBox="0 0 1000 320" aria-hidden="true">
-			<line class="bus" x1="50" y1="160" x2="950" y2="160" />
-			<rect class="term" x="44" y="154" width="12" height="12" />
-			<rect class="term" x="944" y="154" width="12" height="12" />
-
+	<div class="marks" role="img" aria-label={i18n.t.marksAria}>
+		<svg viewBox="0 0 1000 {MARKS_H}" aria-hidden="true">
 			{#each punches as p, i}
-				{@const iconY = p.above ? 58 : 214}
-				{@const stubY1 = p.above ? iconY + 50 : 160}
-				{@const stubY2 = p.above ? 160 : iconY - 2}
-				{@const labelY = p.above ? 36 : 302}
+				{@const cx = X0 + SLOT * i + SLOT / 2}
+				{@const high = i % 2 === 0}
+				{@const cy = high ? 68 : 116}
 				{@const lines = i18n.t.punchLabels[i].split('\n')}
-				<g class="pnode">
-					<rect
-						class="hit"
-						x={p.cx - 74}
-						y={p.above ? 18 : 160}
-						width="148"
-						height={p.above ? 142 : 148}
-					/>
-					<line class="stub" x1={p.cx} y1={stubY1} x2={p.cx} y2={stubY2} />
-					<circle class="joint" cx={p.cx} cy="160" r="3.5" />
-					<g transform="translate({p.cx - 24}, {iconY}) scale(2)">
+				<g class="mark">
+					<rect class="hit" x={cx - SLOT / 2} y="0" width={SLOT} height={MARKS_H} />
+					<polygon class="cartouche" points={bevel(cx - 42, cy, 84, 84, 11)} />
+					<g transform="translate({cx - 24}, {cy + 18}) scale(2)">
 						<path class="punch" d={p.d} />
 					</g>
-					<text
-					class="punch-label"
-					x={p.cx}
-					y={labelY - (p.above ? 0 : (lines.length - 1) * 14)}
-				>
-					{#each lines as line, li}
-						<tspan x={p.cx} dy={li === 0 ? 0 : 14}>{line}</tspan>
-					{/each}
-				</text>
+					<text class="punch-label" x={cx} y={high ? 50 - (lines.length - 1) * 15 : 226}>
+						{#each lines as line, li}
+							<tspan x={cx} dy={li === 0 ? 0 : 15}>{line}</tspan>
+						{/each}
+					</text>
 				</g>
 			{/each}
 		</svg>
 
-		<!-- narrow screens: the bus goes vertical -->
-		<div class="machine-m" aria-hidden="true">
+		<!-- narrow screens: the marks stack, still unjoined -->
+		<div class="marks-m" aria-hidden="true">
 			{#each punches as p, i}
 				<div class="m-row">
-					<svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-						<path d={p.d} />
+					<svg viewBox="0 0 40 40" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+						<polygon class="cartouche" points={bevel(1, 1, 38, 38, 6)} />
+						<path d={p.d} transform="translate(8, 8)" />
 					</svg>
-					<span>{i18n.t.punchLabels[i]}</span>
+					<span>{i18n.t.punchLabels[i].replaceAll('\n', ' ')}</span>
 				</div>
 			{/each}
 		</div>
@@ -685,44 +671,30 @@
 		margin-bottom: 2.4rem;
 	}
 
-	.machine {
+	.marks {
 		border: 1px solid var(--line);
 		background: var(--panel);
 		padding: 1.4rem;
 	}
 
-	.machine > svg {
+	.marks > svg {
 		display: block;
 		width: 100%;
 		height: auto;
 	}
 
-	.bus {
-		stroke: var(--line-hi);
-		stroke-width: 1.5;
-	}
-
-	.term {
-		fill: none;
-		stroke: var(--line-hi);
-		stroke-width: 1.5;
-	}
-
-	.pnode .hit {
+	.mark .hit {
 		fill: transparent;
 		stroke: none;
 		pointer-events: all;
 	}
-	.pnode .stub {
+	.mark .cartouche {
+		fill: none;
 		stroke: var(--line-hi);
 		stroke-width: 1.2;
 		transition: stroke 2.2s ease;
 	}
-	.pnode .joint {
-		fill: var(--line-hi);
-		transition: fill 2.2s ease;
-	}
-	.pnode .punch {
+	.mark .punch {
 		fill: none;
 		stroke: var(--ink-3);
 		stroke-width: 1.5;
@@ -732,7 +704,7 @@
 			stroke 2.2s ease,
 			filter 2.2s ease;
 	}
-	.pnode .punch-label {
+	.mark .punch-label {
 		font-family: var(--font-mono);
 		font-size: 11.5px;
 		letter-spacing: 0.08em;
@@ -741,28 +713,24 @@
 		transition: fill 2s ease;
 	}
 
-	.pnode:hover .stub {
+	.mark:hover .cartouche {
 		stroke: var(--ember);
 		transition: stroke 0.12s;
 	}
-	.pnode:hover .joint {
-		fill: var(--ember);
-		transition: fill 0.12s;
-	}
-	.pnode:hover .punch {
+	.mark:hover .punch {
 		stroke: var(--ember);
 		filter: drop-shadow(0 0 6px rgba(184, 85, 31, 0.45));
 		transition:
 			stroke 0.12s,
 			filter 0.12s;
 	}
-	.pnode:hover .punch-label {
+	.mark:hover .punch-label {
 		fill: var(--ink);
 		transition: fill 0.12s;
 	}
 
-	/* vertical-bus fallback, hidden on wide screens */
-	.machine-m {
+	/* stacked fallback, hidden on wide screens */
+	.marks-m {
 		display: none;
 	}
 
@@ -879,38 +847,31 @@
 			flex-direction: row;
 			justify-content: space-between;
 		}
-		/* the bus goes vertical: icon rows on a left rail */
-		.machine > svg {
+		/* the marks stack: one per row, still unjoined */
+		.marks > svg {
 			display: none;
 		}
-		.machine {
+		.marks {
 			padding: 0.6rem 1.4rem;
 		}
-		.machine-m {
+		.marks-m {
 			display: block;
-			border-left: 1px solid var(--line-hi);
 		}
 		.m-row {
-			position: relative;
 			display: flex;
 			align-items: center;
 			gap: 1rem;
-			padding: 0.85rem 0 0.85rem 1.6rem;
-		}
-		.m-row::before {
-			content: '';
-			position: absolute;
-			left: 0;
-			top: 50%;
-			width: 1.1rem;
-			height: 1px;
-			background: var(--line-hi);
+			padding: 0.7rem 0;
 		}
 		.m-row svg {
-			width: 24px;
-			height: 24px;
+			width: 36px;
+			height: 36px;
 			flex-shrink: 0;
 			stroke: var(--ink-3);
+		}
+		.m-row .cartouche {
+			stroke: var(--line-hi);
+			stroke-width: 1.2;
 		}
 		.m-row span {
 			font-family: var(--font-mono);
