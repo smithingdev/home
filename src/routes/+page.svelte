@@ -94,6 +94,39 @@
 		let last = 0;
 		let active = false;
 
+		/* Idle wave: when no hand is on the name, a band of heat drifts across
+		   it and back. The band moves gradually, so each letter warms slow and
+		   cools slow; a real cursor always takes over. */
+		const hero = new Set(Array.from(document.querySelectorAll<HTMLElement>('.plate .lt')));
+		const heroIdx = letterEls.flatMap((el, i) => (hero.has(el) ? [i] : []));
+		const WAVE_MS = 9000; /* there and back */
+		const WAVE_PEAK = 0.18; /* a faint warmth, well below a hand's fire */
+		const WAVE_SIGMA = 1.5; /* in letters */
+		let waveStart = -1;
+		let wantWave = false;
+		let lastHand = -Infinity;
+
+		const wave = (t: number) => {
+			if (wantWave) {
+				waveStart = t;
+				wantWave = false;
+			}
+			if (waveStart < 0) return false;
+			const u = (t - waveStart) / WAVE_MS;
+			if (u >= 1) {
+				waveStart = -1;
+				return false;
+			}
+			const x = u < 0.5 ? u * 2 : 2 - u * 2;
+			const pos = -1.5 + x * (heroIdx.length + 2);
+			for (let k = 0; k < heroIdx.length; k++) {
+				const add = WAVE_PEAK * Math.exp(-((k - pos) ** 2) / (2 * WAVE_SIGMA ** 2));
+				const i = heroIdx[k];
+				if (add > heats[i]) heats[i] = add;
+			}
+			return true;
+		};
+
 		const apply = () => {
 			for (let i = 0; i < letterEls.length; i++) {
 				const el = letterEls[i];
@@ -116,7 +149,8 @@
 			const dt = last ? t - last : 16;
 			last = t;
 			const decay = Math.exp(-dt / 1600); // slow cool
-			let any = false;
+			let any = wave(t);
+			if (hand) warmAt(hand.x, hand.y); /* a resting hand keeps its heat */
 			for (let i = 0; i < heats.length; i++) {
 				heats[i] *= decay;
 				if (heats[i] > 0.01) any = true;
@@ -138,44 +172,54 @@
 			}
 		};
 
-		const onMove = (e: MouseEvent) => {
+		/* Last known cursor, so heat holds under a hand that stops moving */
+		let hand: { x: number; y: number } | null = null;
+
+		const plate = document.querySelector<HTMLElement>('.plate');
+
+		const warmAt = (x: number, y: number) => {
 			for (let i = 0; i < letterEls.length; i++) {
 				const el = letterEls[i];
 				if (!el) continue;
 				const r = el.getBoundingClientRect();
-				const dx = e.clientX - (r.left + r.width / 2);
-				const dy = e.clientY - (r.top + r.height / 2);
+				const dx = x - (r.left + r.width / 2);
+				const dy = y - (r.top + r.height / 2);
 				const s = Math.max(70, r.width); // heat radius scales with letter size
 				const add = Math.exp(-(dx * dx + dy * dy) / (2 * s * s));
 				if (add > heats[i]) heats[i] = Math.min(1, add);
 			}
-			ignite();
+			/* only a hand actually on the name holds the wave back — heat
+			   reaches well past the letters, so proximity isn't enough */
+			const r = plate?.getBoundingClientRect();
+			if (r && x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) {
+				lastHand = performance.now();
+				waveStart = -1; /* the hand takes over */
+			}
 		};
 
-		let sweepTimer: ReturnType<typeof setInterval> | undefined;
+		const onMove = (e: MouseEvent) => {
+			hand = { x: e.clientX, y: e.clientY };
+			warmAt(hand.x, hand.y);
+			ignite();
+		};
+		const onLeave = () => (hand = null);
 
-		if (matchMedia('(hover: none)').matches) {
-			/* Touch devices: an unseen hand sweeps the name instead */
-			const sweep = () => {
-				for (let i = 0; i < NAME.length; i++) {
-					setTimeout(() => {
-						heats[i] = 1;
-						ignite();
-					}, i * 120);
-				}
-			};
-			const first = setTimeout(sweep, 900);
-			sweepTimer = setInterval(sweep, 6000);
-			return () => {
-				clearTimeout(first);
-				clearInterval(sweepTimer);
-				cancelAnimationFrame(raf);
-			};
-		}
+		const startWave = () => {
+			if (performance.now() - lastHand < 6000) return;
+			wantWave = true;
+			ignite();
+		};
+		/* first pass once the hero has settled, then every few seconds */
+		const first = setTimeout(startWave, 1400);
+		const waveTimer = setInterval(startWave, WAVE_MS + 4000);
 
 		window.addEventListener('mousemove', onMove, { passive: true });
+		document.documentElement.addEventListener('mouseleave', onLeave);
 		return () => {
 			window.removeEventListener('mousemove', onMove);
+			document.documentElement.removeEventListener('mouseleave', onLeave);
+			clearTimeout(first);
+			clearInterval(waveTimer);
 			cancelAnimationFrame(raf);
 		};
 	});
